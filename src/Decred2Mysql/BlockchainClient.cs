@@ -21,7 +21,7 @@ namespace Decred2Mysql
             return JsonConvert.DeserializeObject<Block>(results);
         }
 
-        public Block GetBlock(int blockNum)
+        public Block GetBlock(long blockNum)
         {
             // Get hash for blockNum
             var query = new Uri(ApiUri, $"/api/block-index/{blockNum}");

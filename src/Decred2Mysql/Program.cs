@@ -10,14 +10,24 @@ namespace Decred2Mysql
             Console.WriteLine("Starting block query...");
 
             var blockchainClient = new BlockchainClient(new Uri("https://mainnet.decred.org/"));
-            var currentBlock = blockchainClient.GetBlock(0);
+            var currentBlock = blockchainClient.GetBlock(100000);
 
             while (currentBlock?.nextblockhash != null)
             {
-                var blockTransactions = blockchainClient.GetBlockTransactions(currentBlock.hash, 0);
-                Console.WriteLine($"Block #{currentBlock.height} - Hash: {currentBlock.hash} - Tx Count: {currentBlock.tx.Count} - API Pages: {blockTransactions.pagesTotal}");
+                Console.WriteLine($"Block #{currentBlock.height} - Hash: {currentBlock.hash} - Tx Count: {currentBlock.tx.Count}");
 
                 // write data to sql here!
+
+                Console.Write("  Getting block transactions...");
+                var blockTransactions = blockchainClient.GetBlockTransactions(currentBlock.hash, 0);
+                Console.WriteLine($"pulling {blockTransactions.pagesTotal} pages.");
+                if (blockTransactions.pagesTotal > 1)
+                {
+                    for (int p = 1; p < blockTransactions.pagesTotal; p++)
+                    {
+                        var nextBlockTransactions = blockchainClient.GetBlockTransactions(currentBlock.hash, p);
+                    }
+                }
 
                 currentBlock = blockchainClient.GetBlock(currentBlock.nextblockhash);
             }
