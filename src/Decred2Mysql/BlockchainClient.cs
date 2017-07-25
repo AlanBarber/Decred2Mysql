@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
+using Decred2Mysql.Models;
 using Newtonsoft.Json;
 
 namespace Decred2Mysql
